@@ -1,0 +1,14 @@
+[vmware_vms]
+testvm001 ansible_host=192.168.1.172 vm_netmask=255.255.0.0 
+
+[vmware_vms:vars]
+
+vcenter_datacenter=DC01 
+vcenter_cluster=Cluster01 
+vm_template=rhel_template 
+vm_ram_mb=1024 
+vm_cpus=1 
+vm_network="VM Network" 
+vcenter_server=
+vcenter_user=
+vcenter_password=

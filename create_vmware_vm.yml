@@ -1,0 +1,30 @@
+---
+
+- hosts: vmware_vms
+  connection: local
+  tasks:
+
+  - name: Example for deploying a RHEL VM
+    vmware_guest:
+      hostname: "{{ vcenter_server }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: no
+      cluster: "{{ vcenter_cluster }}"
+      datacenter: "{{ vcenter_datacenter }}"
+      folder: /{{ vcenter_datacenter }}/vm/
+      name: "{{ inventory_hostname }}"
+      state: poweredon
+      guest_id: rhel7_64Guest
+      template: "{{ vm_template }}"
+      hardware:
+        memory_mb: "{{ vm_ram_mb }}"
+        num_cpus: "{{ vm_cpus }}"
+        scsi: paravirtual
+      networks:
+      - name: "{{ vm_network }}"
+        ip: "{{ ansible_host }}"
+        netmask: "{{ vm_netmask }}"
+        device_type: vmxnet3
+    register: deploy_vm
+
