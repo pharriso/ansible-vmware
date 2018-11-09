@@ -25,6 +25,7 @@
       - name: "{{ vm_network }}"
         ip: "{{ ansible_host }}"
         netmask: "{{ vm_netmask }}"
+        gateway: "{{ vm_gateway }}"
         device_type: vmxnet3
     register: deploy_vm
 
