@@ -16,6 +16,7 @@
       name: "{{ inventory_hostname }}"
       state: shutdown-guest
       state_change_timeout: 200
+    when: vm_status.instance.hw_power_status != 'poweredOff'
 
   - name: Create a snapshot
     vmware_guest_snapshot:
