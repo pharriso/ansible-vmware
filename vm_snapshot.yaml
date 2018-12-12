@@ -4,6 +4,13 @@
   connection: local
   tasks:
 
+  - name: Get VM Status
+    vmware_guest_facts:
+      datacenter: "{{ datacenter_name }}"
+      name: "{{ inventory_hostname }}"
+    delegate_to: localhost
+    register: vm_status
+          
   - name: Shutdown VM using VMTools
     vmware_guest_powerstate:
       name: "{{ inventory_hostname }}"
