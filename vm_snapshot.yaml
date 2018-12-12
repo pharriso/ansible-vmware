@@ -18,6 +18,16 @@
       state_change_timeout: 200
     when: vm_status.instance.hw_power_status != 'poweredOff'
 
+  - name: Fallback - wait until power is off
+    vmware_guest_facts:
+      datacenter: "{{ datacenter_name }}"
+      name: "{{ inventory_hostname }}"
+    delegate_to: localhost
+    register: am_i_off_yet
+    until: am_i_off_yet.instance.hw_power_status == 'poweredOff'
+    retries: 5
+    delay: 60
+
   - name: Create a snapshot
     vmware_guest_snapshot:
       datacenter: "{{ datacenter_name }}"
