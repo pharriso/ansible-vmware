@@ -1,0 +1,26 @@
+---
+
+- hosts: all
+  connection: local
+  tasks:
+
+  - name: Shutdown VM using VMTools
+    vmware_guest_powerstate:
+      name: "{{ inventory_hostname }}"
+      state: shutdown-guest
+      state_change_timeout: 200
+
+  - name: Create a snapshot
+    vmware_guest_snapshot:
+      datacenter: "{{ datacenter_name }}"
+      folder: "/{{ datacenter_name }}/vm/"
+      name: "{{ inventory_hostname }}"
+      state: present
+      snapshot_name: snap1
+      description: snap1_description
+    delegate_to: localhost
+
+  - name: Power VM back on
+    vmware_guest_powerstate:
+      name: "{{ inventory_hostname }}"
+      state: powered-on
