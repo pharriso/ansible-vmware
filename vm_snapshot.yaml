@@ -2,6 +2,8 @@
 
 - hosts: all
   connection: local
+  vars:
+    snapshot_name
   tasks:
 
   - name: Get VM Status
@@ -34,8 +36,8 @@
       folder: "/{{ datacenter_name }}/vm/"
       name: "{{ inventory_hostname }}"
       state: present
-      snapshot_name: snap1
-      description: snap1_description
+      snapshot_name: {{snapshot_name}}
+      description: {{ inventory_hostname }}
     delegate_to: localhost
 
   - name: Power VM back on
