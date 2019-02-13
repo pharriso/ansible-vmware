@@ -1,0 +1,10 @@
+---
+
+- hosts: localhost
+  connection: local
+  tasks:
+  - name: Find VM
+    vmware_guest_find:
+      validate_certs: no
+      name: jboss0
+
