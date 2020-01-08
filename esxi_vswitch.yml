@@ -1,0 +1,17 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+  - name: Add Management Network VM Portgroup
+    vmware_portgroup:
+      hostname: 147.75.84.226 
+      username: root
+      password: password
+      validate_certs: false
+      switch: vSwitch0
+      portgroup: test
+      vlan_id: 100
+      hosts: esxi.pharriso.co.uk
+
