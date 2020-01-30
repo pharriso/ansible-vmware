@@ -1,0 +1,16 @@
+network_interfaces:
+  - name: test
+    mac: aa:bb:dd:aa:00:14
+    ip: 10.10.10.100
+    netmask: 255.255.255.0
+    device_type: vmxnet3
+    dns_servers: "{{ dns_servers }}"
+  - name: test2
+    mac: aa:bb:dd:aa:00:16
+    ip: 10.10.10.103
+    netmask: 255.255.255.0
+    device_type: vmxnet3
+
+ansible_host: 192.168.1.172 
+vm_netmask: 255.255.0.0 
+vm_gateway: 192.168.1.1

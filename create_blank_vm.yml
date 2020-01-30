@@ -1,0 +1,27 @@
+---
+
+- hosts: vmware_vms
+  connection: local
+  gather_facts: false
+  tasks:
+  - name: Create a virtual machine on given ESXi hostname
+    vmware_guest:
+      hostname: esxi6
+      username: root
+      password: password
+      validate_certs: no
+      folder: /vm/
+      name: "{{ inventory_hostname }}"
+      state: poweredoff
+      guest_id: centos64Guest
+      esxi_hostname: esxi6
+      disk:
+      - size_gb: 10
+        type: thin
+        datastore: datastore1
+      hardware:
+        memory_mb: 512
+        num_cpus: 4
+        scsi: paravirtual
+      networks: "{{ network_interfaces }}"
+    register: deploy_vm
