@@ -6,9 +6,9 @@
   tasks:
   - name: Create a virtual machine on given ESXi hostname
     vmware_guest:
-      hostname: esxi6
+      hostname: 139.178.73.82
       username: root
-      password: password
+      password: ']N9(2Dtq6j'
       validate_certs: no
       folder: /vm/
       name: "{{ inventory_hostname }}"

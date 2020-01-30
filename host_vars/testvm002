@@ -1,0 +1,14 @@
+network_interfaces:
+  - name: test
+    ip: 10.10.10.200
+    netmask: 255.255.255.0
+    device_type: vmxnet3
+    dns_servers: "{{ dns_servers }}"
+  - name: test2
+    ip: 10.10.10.203
+    netmask: 255.255.255.0
+    device_type: vmxnet3
+  - name: "VM Network"
+    ip: 10.10.10.203
+    netmask: 255.255.255.0
+    device_type: vmxnet3
