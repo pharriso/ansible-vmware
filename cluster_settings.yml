@@ -1,0 +1,20 @@
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+  - name: check vmware cluster ha settings
+    vmware_cluster_ha:
+      validate_certs: no
+      datacenter_name: demolab
+      cluster_name: rhnode2
+      enable_ha: True
+      host_isolation_response: none
+      ha_vm_monitoring: vmMonitoringDisabled
+
+  - name: check vmware cluster drs settings
+    vmware_cluster_drs:
+      validate_certs: no
+      datacenter_name: demolab
+      cluster_name: rhnode2
+      enable_drs: True
+      drs_default_vm_behavior: partiallyAutomated
