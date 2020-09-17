@@ -1,0 +1,15 @@
+plugin: community.vmware.vmware_vm_inventory
+strict: False
+validate_certs: False
+#with_tags: true
+properties:
+  - runtime.powerState
+  - config.name
+  - config.guestId
+#filters:
+# - "'ansible_managed' in tags"
+hostnames:
+  - config.name
+keyed_groups:
+  - key: config.guestId
+    separator: ''
