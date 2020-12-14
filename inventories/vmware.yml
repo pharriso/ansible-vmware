@@ -13,3 +13,5 @@ hostnames:
 keyed_groups:
   - key: config.guestId
     separator: ''
+  - key: tags
+    separator: ''
