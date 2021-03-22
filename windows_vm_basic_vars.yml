@@ -1,0 +1,25 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  tasks:
+  - name: create vm from template
+    vmware_guest:
+      validate_certs: no
+      datacenter: demolab
+      state: poweredon
+      template: "{{ vmware_template }}"
+      name: "{{ vmware_vm_name }}"
+      cluster: "{{ vmware_cluster }}"
+      folder: ansible_demo
+      wait_for_ip_address: true
+      hardware:
+        memory_mb: "{{ vmware_vm_memory }}"
+        num_cpus: "{{ vmware_vm_cpu }}"
+      networks:
+        - name: "{{ vmware_network }}"
+          ip: "{{ vmware_vm_ip }}"
+          netmask: "{{ vmware_vm_netmask }}"
+          gateway: "{{ vmware_vm_gateway }}"
+          type: static
+    delegate_to: localhost
