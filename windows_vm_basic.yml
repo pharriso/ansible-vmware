@@ -1,0 +1,38 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  tasks:
+  - name: create vm from template
+    vmware_guest:
+      username: administrator@vsphere.local
+      password: 
+      hostname: 
+      validate_certs: no
+      datacenter: demolab
+      state: poweredon
+      template: win2016
+      name: testwin.demolab.local
+      cluster: rhnode2
+      folder: ansible_demo
+      wait_for_ip_address: true
+      hardware:
+        memory_mb: 4096
+        num_cpus: 2
+        scsi: paravirtual
+      networks:
+        - name: infra
+          ip: 10.50.0.26
+          netmask: 255.255.252.0
+          gateway: 10.50.0.254
+          type: static
+      customization:
+        domain: demolab.local
+        dns_servers:
+          - 10.50.0.173
+        dns_suffix:
+          - demolab.local
+        joinworkgroup: WORKGROUP
+        autologon: true
+        password: 
+    delegate_to: localhost
