@@ -1,0 +1,38 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+  - name: create vm from template
+    vmware_guest:
+      validate_certs: no
+      datacenter: "{{ vmware_datacenter }}"
+      state: poweredon
+      template: win2016
+      name: "{{ vm_name }}"
+      cluster: "{{ cluster }}"
+      folder: "{{ vmware_folder }}"
+      wait_for_ip_address: true
+      hardware:
+        memory_mb: "{{ memory }}"
+        num_cpus: "{{ cpu }}"
+        scsi: paravirtual
+      networks:
+        - name: "{{ nic_profile }}"
+          ip: "{{ nic_ip }}"
+          netmask: "{{ networks[nic_profile].nic_netmask }}"
+          gateway: "{{ networks[nic_profile].nic_gateway }}"
+          type: static
+      customization:
+        domain: "{{ dns_search }}"
+        dns_servers:
+          - "{{ networks[nic_profile].dns_server }}"
+        dns_suffix:
+          - "{{ dns_search }}"
+        joinworkgroup: WORKGROUP
+        autologon: true
+        password: "{{ ansible_password }}"
+        runonce:
+        - powershell.exe -ExecutionPolicy Unrestricted -File C:\Windows\ansible\ConfigureRemotingForAnsible.ps1
+    delegate_to: localhost

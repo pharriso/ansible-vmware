@@ -1,0 +1,33 @@
+---
+
+- name: patch linux vmware vms
+  hosts: all
+  tasks:
+  - name: List ansible packages and register result to print with debug later.
+    yum:
+      list: updates
+    register: result
+
+  - debug:
+      var: result
+
+  - pause:
+
+  - name: Create a snapshot
+    vmware_guest_snapshot:
+      datacenter: "{{ datacenter_name }}"
+      name: "{{ inventory_hostname }}"
+      state: present
+      snapshot_name: "Ansible Automation patching"
+      description: "Ansible Automation patching"
+    delegate_to: localhost
+
+  - name: yum update
+    yum:
+      name: '*'
+      state: latest
+    register: patched
+
+  - name: reboot
+    reboot:
+    when: patched is changed
