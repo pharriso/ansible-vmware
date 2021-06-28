@@ -1,0 +1,86 @@
+---
+
+- name: clone vmware vm
+  hosts: localhost
+  gather_facts: false
+  tasks:
+  - name: find source vm
+    vmware_guest_info:
+      validate_certs: no
+      datacenter: demolab
+      name: "{{ source_vm }}"
+    register: find_vm
+    ignore_errors: true
+
+  - name: fail if we can't find the vm
+    ansible.builtin.fail:
+      msg: "VM {{ source_vm }} doesn't exist"
+    when: find_vm.instance is not defined
+    delegate_to: localhost
+
+  - name: find vmware datastore name for target cluster
+    vmware_datastore_info:
+      cluster: '{{ target_cluster }}'
+      validate_certs: no
+    delegate_to: localhost
+    register: datastore
+
+  - name: shutdown source vm using vmware tools
+    vmware_guest_powerstate:
+      validate_certs: no
+      name: "{{ source_vm }}"
+      state: shutdown-guest
+      state_change_timeout: 200
+    delegate_to: localhost
+
+  - name: clone vm
+    vmware_guest:
+      validate_certs: no
+      datacenter: demolab
+      state: poweredon
+      template: "{{ source_vm }}"
+      name: "{{ target_vm }}"
+      cluster: "{{ cluster }}"
+      datastore: "{{ datastore.datastores[0].name }}"
+      folder: ansible_demo
+      wait_for_ip_address: true
+      networks:
+        - name: infra
+          ip: "{{ target_vm_ip }}"
+          netmask: 255.255.252.0
+          gateway: 10.50.0.254
+          type: static
+      customization:
+        domain: demolab.local
+        dns_servers:
+          - 10.50.0.173
+        dns_suffix:
+          - demolab.local
+        joinworkgroup: WORKGROUP
+        autologon: true
+        password: "{{ ansible_password }}"
+    delegate_to: localhost
+
+  - name: restart source vm
+    vmware_guest_powerstate:
+      validate_certs: no
+      name: "{{ source_vm }}"
+      state: powered-on
+      state_change_timeout: 200
+    delegate_to: localhost
+
+  - name: wait for connection to source vm
+    wait_for:
+      host: "{{ source_vm }}"
+      delay: 10
+      timeout: 1200
+      port: 5986
+    delegate_to: localhost
+
+  - name: wait for connection to target vm
+    wait_for:
+      host: "{{ target_vm }}"
+      delay: 10
+      timeout: 1200
+      port: 5986
+    delegate_to: localhost
