@@ -46,7 +46,7 @@
       wait_for_ip_address: true
       networks:
         - name: infra
-          ip: "{{ target_vm_ip }}"
+          ip: "{{ lookup('dig', '{{ target_vm }}')}}
           netmask: 255.255.252.0
           gateway: 10.50.0.254
           type: static
