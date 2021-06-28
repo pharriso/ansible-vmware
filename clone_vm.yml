@@ -25,6 +25,10 @@
     delegate_to: localhost
     register: datastore
 
+  - name: find target vm ip address in dns
+    set_fact:
+      target_vm_ip: "{{ lookup('dig', '{{ target_vm }}')}}"
+
   - name: shutdown source vm using vmware tools
     vmware_guest_powerstate:
       validate_certs: no
@@ -40,13 +44,13 @@
       state: poweredon
       template: "{{ source_vm }}"
       name: "{{ target_vm }}"
-      cluster: "{{ cluster }}"
+      cluster: "{{ target_cluster }}"
       datastore: "{{ datastore.datastores[0].name }}"
       folder: ansible_demo
       wait_for_ip_address: true
       networks:
         - name: infra
-          ip: "{{ lookup('dig', '{{ target_vm }}')}}
+          ip: "{{ target_vm_ip }}"
           netmask: 255.255.252.0
           gateway: 10.50.0.254
           type: static
