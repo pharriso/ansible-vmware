@@ -14,3 +14,5 @@ keyed_groups:
 resources:
   - folder:
     - infra
+filters:
+  - config.guestId == "rhel8_64Guest"
